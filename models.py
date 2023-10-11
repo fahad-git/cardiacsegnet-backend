@@ -2,6 +2,7 @@ from pydantic import BaseModel, Field
 
 
 class Data(BaseModel):
+    id: int
     image: bytes 
     pdf: bytes   
     comment: str
@@ -10,6 +11,7 @@ class Data(BaseModel):
 
 
 class User(BaseModel):
+    id:int
     username: str = Field(..., max_length=100)
     password: str  
     # Will store hashed passwords later

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Body, Depends
+from fastapi import APIRouter, Body
 from models import *
 from dbClient import user_handler
 
@@ -39,11 +39,11 @@ def guest():
 
 
 @router.post("/new/")
-async def create_user(username: str, password: str = Body(..., embed=True, alias="password")):
+async def create_user(id:int, username: str, password: str = Body(..., embed=True, alias="password")):
     
-    user_doc = User(username=username, password=password)
+    user_doc = User(id=id, username=username, password=password)
 
-    user_handler.collection.insert_one(user_doc.dict())
+    user_handler.collection.insert_one(user_doc.model_dump())
     
-    return {"detail": "User created successfully"}
+    return {"detail": "User created successfully", "redirect": "/imageDetails/page"}
 
