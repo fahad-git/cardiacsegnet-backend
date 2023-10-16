@@ -16,5 +16,3 @@ app.add_middleware(
 
 app.include_router(fetch_router, prefix="/api", tags=["Images"])
 app.include_router(login_router, prefix="/api", tags=["Authentication"])
-
-db_client.open_connection()

@@ -43,6 +43,7 @@ class DocumentHandler:
         self.__collection = coll
 
 db_client = MongoDBClient("mongodb+srv://srdan:filipovic@acsp.jyqsecl.mongodb.net/?retryWrites=true&w=majority", "ACSP")
+db_client.open_connection()
 user_handler = DocumentHandler(db_client, "User")
 data_handler = DocumentHandler(db_client, "Data")
 
