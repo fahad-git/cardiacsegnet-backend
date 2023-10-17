@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Body
 from models import *
 from dbClient import user_handler
+from pymongo import DESCENDING
 
 router = APIRouter()
 
@@ -22,13 +23,13 @@ def authenticate_user(username: str, password: str):
         return False
     if not verify_password(password, user["password"]):
         return False
-    return user
+    return str(user["id"])
 
 
 @router.post("/login/")
 async def login(user: User):
-    db_user = authenticate_user(user.username, user.password)
-    if not db_user:
+    user_id = authenticate_user(user.username, user.password)
+    if not user_id:
         return {"status": "error", "detail": "Invalid credentials.", "redirect": None}
     return {"status": "success", "detail": "Logged in successfully", "redirect": "/imageDetails/page"}
 
@@ -39,10 +40,12 @@ def guest():
 
 
 @router.post("/new/")
-async def create_user(id:int, username: str, password: str = Body(..., embed=True, alias="password")):
+async def create_user(new_user: NewUser):
     
-    user_doc = User(id=id, username=username, password=password)
-
+    last_user = user_handler.collection.find_one(sort=[("id", DESCENDING)])
+    new_id = last_user["id"] + 1
+    user_doc = User(id=new_id, username=new_user.username, password=new_user.password)
+    
     user_handler.collection.insert_one(user_doc.model_dump())
     
     return {"detail": "User created successfully", "redirect": "/imageDetails/page"}

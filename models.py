@@ -11,7 +11,11 @@ class Data(BaseModel):
 
 
 class User(BaseModel):
-    id:int
+    id:int = None
     username: str = Field(..., max_length=100)
     password: str  
     # Will store hashed passwords later
+
+class NewUser(BaseModel):
+    username: str
+    password: str
