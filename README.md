@@ -1,5 +1,10 @@
 # Medical Image Analytics Backend
 
+## Installing dependecies
+pip install -r requirements.txt
+
+## Run you code
+python main.py
 
 
 ## Getting started
