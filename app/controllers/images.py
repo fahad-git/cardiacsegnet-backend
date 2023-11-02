@@ -25,6 +25,7 @@ class ImagesController(BaseController):
             "url": image_details.url,
             "imageName": image_details.imageName,
             "imageExtention": image_details.imageExtention,
+            "imageAnnotations": image_details.imageAnnotations,
             "comments": image_details.comments
         }
         return self.images_repository.save_image_details(image_details_with_user)

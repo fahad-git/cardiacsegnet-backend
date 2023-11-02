@@ -6,5 +6,5 @@ class Image(BaseModel):
     url: str 
     imageName: str   
     imageExtention: str 
-    # imageAnnotations: object
+    imageAnnotations: object
     comments: str

@@ -1,5 +1,5 @@
 from app.models import Image
-from core.exceptions.base import UnprocessableEntity
+from core.exceptions.base import NotFoundException, UnprocessableEntity
 from core.repository import BaseRepository
 from core.database.session import get_session_context
 
@@ -32,8 +32,7 @@ class ImagesRepository(BaseRepository):
         response = self.image_handler.insert_document(image_details)
         if response is not None:
             return image_details
-        else:
-            raise UnprocessableEntity("Failed to inset record.")
+        raise UnprocessableEntity("Failed to insert record.")
 
     def get_image_details_list(
         self, id: str | None = None
@@ -57,4 +56,7 @@ class ImagesRepository(BaseRepository):
         :return: Image.
         """
         query = {"id": id}
-        return self.image_handler.find_document(query)
+        response = self.image_handler.find_document(query)
+        if response is not None:
+            return response
+        raise NotFoundException("Cannot find information you requested")
