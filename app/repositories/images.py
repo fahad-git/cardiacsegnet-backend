@@ -1,8 +1,7 @@
 from app.models import Image
+from core.exceptions.base import UnprocessableEntity
 from core.repository import BaseRepository
-import asyncio
 from core.database.session import get_session_context
-from pydantic import EmailStr
 
 class ImagesRepository(BaseRepository):
     """
@@ -23,17 +22,21 @@ class ImagesRepository(BaseRepository):
         """
         return self.image_handler.insert_document(image)
 
-    def save_image_details(self) -> Image | None:
+    def save_image_details(self, image_details: Image) -> Image | None:
         """
         Save image details to database.
 
         :return: Images
 
         """
-        return self.image_handler.insert_document(Image)
+        response = self.image_handler.insert_document(image_details)
+        if response is not None:
+            return image_details
+        else:
+            raise UnprocessableEntity("Failed to inset record.")
 
     def get_image_details_list(
-        self, email: EmailStr | None = None
+        self, id: str | None = None
     ) -> list[Image] | None:
         """
         Get all images by user
@@ -41,7 +44,8 @@ class ImagesRepository(BaseRepository):
         :param email: Email.
         :return: List[Image].
         """
-        return self.image_handler.find_all()
+        query = {"uuid": id}
+        return self.image_handler.find_all(query)
 
     def get_image_detail(
         self, id: str | None = None
