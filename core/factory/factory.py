@@ -2,9 +2,9 @@ from functools import partial
 
 from fastapi import Depends
 
-from app.controllers import UserController, AuthController
+from app.controllers import UserController, AuthController, ImagesController
 from app.models import User
-from app.repositories import UserRepository
+from app.repositories import UserRepository, ImagesRepository
 
 from core.database import get_session
 
@@ -29,4 +29,9 @@ class Factory:
         return AuthController(
             # user_repository=self.user_repository(db_session=db_session),
             user_repository = UserRepository()
+        )
+
+    def get_images_controller(self, db_session=Depends(get_session)):
+        return ImagesController(
+            images_repository = ImagesRepository()
         )

@@ -15,7 +15,7 @@ class BaseController():
         self.model_class = model
         self.repository = repository
 
-    async def get_by_id(
+    def get_by_id(
         self, id:int | None = None
     ) -> list[Any]:
         """
@@ -24,8 +24,8 @@ class BaseController():
         :param join_: The joins to make.
         :return: A list of records.
         """
-        query = {id: id}
-        response = await self.repository.find_all(query)
+        query = {"id": id}
+        response = self.repository.find_all(query)
         return response
     
     def get_all(self):

@@ -56,3 +56,16 @@ class UserRepository(BaseRepository):
         """
         query = {"email": email}
         return self.user_handler.find_document(query)
+    
+    def get_by_id(
+        self, id: str | None = None
+    ) -> User | None:
+        """
+        Get user by email.
+
+        :param email: Email.
+        :param join_: Join relations.
+        :return: User.
+        """
+        query = {"uuid": id}
+        return self.user_handler.find_document(query)
