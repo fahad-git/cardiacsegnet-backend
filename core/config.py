@@ -18,7 +18,9 @@ class Config(BaseConfig):
     ENVIRONMENT: str = EnvironmentType.DEVELOPMENT
     MONGODB_URL: str = "mongodb+srv://srdan:filipovic@acsp.jyqsecl.mongodb.net/?retryWrites=true&w=majority"
     MONGODB_URL_LOCAL: str = 'mongodb://localhost:27017/'
-    ALLOWED_ORIGINS: str = "http://localhost:3000"
+    ALLOWED_ORIGIN_DEVELOPMENT: str = "http://localhost:3000"
+    ALLOWED_ORIGIN_BETA: str = "http://192.168.1.41:3000"
+    ALLOWED_ORIGIN_PROD: str = "https://128.39.142.117:3000/"
     RELEASE_VERSION: str = "0.1"
     SECRET_KEY: str = "super-secret-key"
     JWT_ALGORITHM: str = "HS256"
