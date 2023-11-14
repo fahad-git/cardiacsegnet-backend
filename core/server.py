@@ -40,7 +40,7 @@ def make_middleware() -> List[Middleware]:
     middleware = [
         Middleware(
             CORSMiddleware,
-            allow_origins=[config.ALLOWED_ORIGIN_DEVELOPMENT, config.ALLOWED_ORIGIN_BETA, config.ALLOWED_ORIGIN_PROD],
+            allow_origins=[config.ALLOWED_ORIGIN_DEVELOPMENT, config.ALLOWED_ORIGIN_BETA, config.ALLOWED_ORIGIN_PROD, config.ALLOWED_ORIGIN_PROD_SEC],
             allow_credentials=True,
             allow_methods=["*"],
             allow_headers=["*"],
