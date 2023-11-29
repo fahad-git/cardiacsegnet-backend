@@ -2,6 +2,7 @@ from app.models import Image
 from core.exceptions.base import NotFoundException, UnprocessableEntity
 from core.repository import BaseRepository
 from core.database.session import get_session_context
+from fastapi import UploadFile
 
 class ImagesRepository(BaseRepository):
     """
@@ -13,14 +14,21 @@ class ImagesRepository(BaseRepository):
         super().__init__(self.db_client, "Images")
         self.image_handler = BaseRepository(self.db_client, "Images")
 
-    def upload_image(self, image: Image) -> Image | None:
+    def save_image(self, userId:str, image_file: UploadFile) -> str | None:
         """
         Upload image to the server.
 
         :return: Image
 
         """
-        return self.image_handler.insert_document(image)
+        try:
+            file_location = f"data/{userId + '-' + image_file.filename}"
+            with open(file_location, "wb+") as file_object:
+                file_object.write(image_file.file.read())
+            url = file_location 
+            return { "url": url, "filename": image_file.filename } 
+        except Exception as e:
+            raise UnprocessableEntity("Failed to upload image.") 
 
     def save_image_details(self, image_details: Image) -> Image | None:
         """
@@ -60,3 +68,5 @@ class ImagesRepository(BaseRepository):
         if response is not None:
             return response
         raise NotFoundException("Cannot find information you requested")
+    
+    

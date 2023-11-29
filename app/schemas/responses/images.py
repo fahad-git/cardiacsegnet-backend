@@ -8,3 +8,7 @@ class ImagesResponse(BaseModel):
     imageExtention: str = Field(..., example=".png")
     imageAnnotations: object = Field(..., example={"key1": "value1", "key2": "value2"})    
     comments: str = Field(..., example="This image is for...")
+
+class UploadResponse(BaseModel):
+    url: str = Field(..., example="http://www.customeimage-url.com")
+    filename: str = Field(..., example="john.doe")
