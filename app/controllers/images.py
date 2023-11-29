@@ -1,10 +1,17 @@
 from pydantic import EmailStr
-from app.models import Image
+from fastapi import UploadFile
+from fastapi import HTTPException
+
+from app.models import Image, AnnotationUpdateModel
 from app.models.user import User
 from app.schemas.requests.images import ImagesRequest
 from core.controller import BaseController
 from app.repositories import ImagesRepository
 import copy
+from app.repositories.images import ImagesRepository
+import os
+import uuid
+from app.models.user import User
 
 
 class ImagesController(BaseController):
@@ -29,3 +36,6 @@ class ImagesController(BaseController):
             "comments": image_details.comments
         }
         return self.images_repository.save_image_details(image_details_with_user)
+
+    def save_image(self, user: User, image_file: UploadFile) -> str:
+        return self.images_repository.save_image(userId=user["uuid"], image_file=image_file)
