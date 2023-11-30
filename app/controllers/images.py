@@ -31,6 +31,7 @@ class ImagesController(BaseController):
             "id": image_details.id,
             "url": image_details.url,
             "imageName": image_details.imageName,
+            "reportUrl": image_details.reportUrl,
             "imageExtention": image_details.imageExtention,
             "imageAnnotations": image_details.imageAnnotations,
             "comments": image_details.comments

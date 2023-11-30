@@ -6,7 +6,8 @@ class Image(BaseModel):
     uuid: str
     id: str
     url: str 
-    imageName: str   
+    imageName: str
+    reportUrl: str
     imageExtention: str 
     imageAnnotations: object
     comments: str
