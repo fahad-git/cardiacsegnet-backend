@@ -25,8 +25,8 @@ class ImagesRepository(BaseRepository):
             file_location = f"data/{userId + '-' + image_file.filename}"
             with open(file_location, "wb+") as file_object:
                 file_object.write(image_file.file.read())
-            url = file_location 
-            return { "url": url, "filename": image_file.filename } 
+            url = "/images/get-image/" + userId + '-' + image_file.filename
+            return { "url": url, "filename": image_file.filename, "location": file_location } 
         except Exception as e:
             raise UnprocessableEntity("Failed to upload image.") 
 

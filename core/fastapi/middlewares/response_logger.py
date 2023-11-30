@@ -30,8 +30,10 @@ class ResponseLoggerMiddleware:
                 response_info.status_code = message.get("status")
             elif message.get("type") == "http.response.body":
                 if body := message.get("body"):
-                    response_info.body += body.decode("utf8")
-
+                    try:
+                        response_info.body += body.decode("utf8")
+                    except:
+                        response_info.body = response_info.body
             await send(message)
 
         await self.app(scope, receive, _logging_send)

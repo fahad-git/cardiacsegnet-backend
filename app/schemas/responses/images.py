@@ -12,3 +12,4 @@ class ImagesResponse(BaseModel):
 class UploadResponse(BaseModel):
     url: str = Field(..., example="http://www.customeimage-url.com")
     filename: str = Field(..., example="john.doe")
+    location: str = Field(..., example="john.doe")

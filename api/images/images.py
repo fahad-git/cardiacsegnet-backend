@@ -1,9 +1,10 @@
 from typing import Callable
 from app.models.images import Image
+from core.exceptions.base import NotFoundException
 
 from fastapi import APIRouter, Depends, UploadFile, File, Form
 from fastapi.encoders import jsonable_encoder
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
 
 from app.controllers import ImagesController
 from app.models.user import User
@@ -15,9 +16,16 @@ from core.fastapi.dependencies import AuthenticationRequired
 from core.fastapi.dependencies.current_user import get_current_user
 
 from pydantic import EmailStr
-
+from pathlib import Path
 
 image_router = APIRouter()
+
+@image_router.get("/get-image/{imagepath}")
+def serve_image(imagepath: str)-> None:
+    file_path = Path("data") / imagepath
+    if not file_path.is_file():
+        raise NotFoundException("File not fount")
+    return FileResponse(file_path)
 
 @image_router.post("/upload-image", status_code=200, dependencies=[Depends(AuthenticationRequired)])
 def upload_image(
