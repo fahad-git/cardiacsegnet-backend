@@ -22,11 +22,30 @@ class ImagesRepository(BaseRepository):
 
         """
         try:
-            file_location = f"data/{userId + '-' + image_file.filename}"
+            file_location = f"data/{'org-' + userId + '-' + image_file.filename}"
+            file_location_seg = f"data/{'seg-' + userId + '-' + image_file.filename}"
+            file_location_xai = f"data/{'xai-' + userId + '-' + image_file.filename}"
+
+            org_img = image_file.file.read()
+
+            ###############################################
+            #      Here will pass image to the model      #
+            ###############################################
+
             with open(file_location, "wb+") as file_object:
-                file_object.write(image_file.file.read())
-            url = "/images/get-image/" + userId + '-' + image_file.filename
-            return { "url": url, "filename": image_file.filename, "location": file_location } 
+                file_object.write(org_img)
+
+            with open(file_location_seg, "wb+") as file_object:
+                file_object.write(org_img)
+
+            with open(file_location_xai, "wb+") as file_object:
+                file_object.write(org_img)
+
+            url = "/images/get-image/org-" + userId + '-' + image_file.filename
+            segUrl = "/images/get-image/seg-" + userId + '-' + image_file.filename
+            xaiUrl = "/images/get-image/xai-" + userId + '-' + image_file.filename
+
+            return { "url": url, "segUrl": segUrl, "xaiUrl": xaiUrl, "filename": image_file.filename, "location": file_location } 
         except Exception as e:
             raise UnprocessableEntity("Failed to upload image.") 
 

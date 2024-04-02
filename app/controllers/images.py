@@ -30,6 +30,8 @@ class ImagesController(BaseController):
             "uuid": user["uuid"],
             "id": image_details.id,
             "url": image_details.url,
+            "segUrl": image_details.segUrl,
+            "xaiUrl": image_details.xaiUrl,
             "imageName": image_details.imageName,
             "reportUrl": image_details.reportUrl,
             "imageExtention": image_details.imageExtention,

@@ -6,6 +6,8 @@ class Image(BaseModel):
     uuid: str
     id: str
     url: str 
+    segUrl: str 
+    xaiUrl: str 
     imageName: str
     reportUrl: str
     imageExtention: str 
