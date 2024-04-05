@@ -20,9 +20,10 @@ from pathlib import Path
 
 image_router = APIRouter()
 
-@image_router.get("/get-image/{imagepath}")
+@image_router.get("/get-image/{imagepath:path}")
 def serve_image(imagepath: str)-> None:
     file_path = Path("data") / imagepath
+    print("File path: ", file_path)
     if not file_path.is_file():
         raise NotFoundException("File not fount")
     return FileResponse(file_path)

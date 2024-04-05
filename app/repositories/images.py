@@ -3,6 +3,8 @@ from core.exceptions.base import NotFoundException, UnprocessableEntity
 from core.repository import BaseRepository
 from core.database.session import get_session_context
 from fastapi import UploadFile
+import core.utility.image_module as im
+import os
 
 class ImagesRepository(BaseRepository):
     """
@@ -22,30 +24,72 @@ class ImagesRepository(BaseRepository):
 
         """
         try:
-            file_location = f"data/{'org-' + userId + '-' + image_file.filename}"
-            file_location_seg = f"data/{'seg-' + userId + '-' + image_file.filename}"
-            file_location_xai = f"data/{'xai-' + userId + '-' + image_file.filename}"
+            base_file_name = str(image_file.filename).split(".")[0]
+            base_dir_path = userId + "-" + base_file_name
 
-            org_img = image_file.file.read()
+            os.makedirs(f"data/" + base_dir_path, exist_ok=True)
+
+            org_file_location = f"data/{base_dir_path}/org-{userId}-{image_file.filename}"
+            # pass file to the model.
+            # model will create segmented image and save it here.
+            seg_file_location = f"data/{base_dir_path}/seg-{userId}-{image_file.filename}"
+            # pass file to XAI module
+            # model will create xai image and save it here.
+            xai_file_location = f"data/{base_dir_path}/xai-{userId}-{image_file.filename}"
 
             ###############################################
             #      Here will pass image to the model      #
             ###############################################
+            org_img = image_file.file.read()
+            seg_img = org_img # this will come from model
+            xai_img = org_img # this will come from model
 
-            with open(file_location, "wb+") as file_object:
+            with open(org_file_location, "wb+") as file_object:
                 file_object.write(org_img)
 
-            with open(file_location_seg, "wb+") as file_object:
-                file_object.write(org_img)
+            with open(seg_file_location, "wb+") as file_object:
+                file_object.write(seg_img) # later, seg_img will come from model
 
-            with open(file_location_xai, "wb+") as file_object:
-                file_object.write(org_img)
+            with open(xai_file_location, "wb+") as file_object:
+                file_object.write(xai_img) # later, xai_img will come from model
+            
+            orgUrl = f"/images/get-image/{base_dir_path}/org-{userId}-{image_file.filename}"
+            segUrl = f"/images/get-image/{base_dir_path}/seg-{userId}-{image_file.filename}"
+            xaiUrl = f"/images/get-image/{base_dir_path}/xai-{userId}-{image_file.filename}"
+            
+            orgDim1Url = f"/images/get-image/{base_dir_path}/org-dim-1-{userId}-{base_file_name}.png"
+            orgDim2Url = f"/images/get-image/{base_dir_path}/org-dim-2-{userId}-{base_file_name}.png"
+            orgDim3Url = f"/images/get-image/{base_dir_path}/org-dim-3-{userId}-{base_file_name}.png"
 
-            url = "/images/get-image/org-" + userId + '-' + image_file.filename
-            segUrl = "/images/get-image/seg-" + userId + '-' + image_file.filename
-            xaiUrl = "/images/get-image/xai-" + userId + '-' + image_file.filename
+            segDim1Url = f"/images/get-image/{base_dir_path}/seg-dim1-{userId}-{base_file_name}.png"
+            segDim2Url = f"/images/get-image/{base_dir_path}/seg-dim2-{userId}-{base_file_name}.png"
+            segDim3Url = f"/images/get-image/{base_dir_path}/seg-dim3-{userId}-{base_file_name}.png"
 
-            return { "url": url, "segUrl": segUrl, "xaiUrl": xaiUrl, "filename": image_file.filename, "location": file_location } 
+            xaiDim1Url = f"/images/get-image/{base_dir_path}/xai-dim1-{userId}-{base_file_name}.png"
+            xaiDim2Url = f"/images/get-image/{base_dir_path}/xai-dim2-{userId}-{base_file_name}.png"
+            xaiDim3Url = f"/images/get-image/{base_dir_path}/xai-dim3-{userId}-{base_file_name}.png"
+            
+            # for file names
+            org_file_names = [os.path.basename(orgDim1Url), os.path.basename(orgDim2Url), os.path.basename(orgDim3Url)]
+            seg_file_names = [os.path.basename(segDim1Url), os.path.basename(segDim2Url), os.path.basename(segDim3Url)]
+            xai_file_names = [os.path.basename(xaiDim1Url), os.path.basename(xaiDim2Url), os.path.basename(xaiDim3Url)]
+
+            im.save_slice_as_image(org_file_location, f"data/" + base_dir_path, org_file_names)
+
+            im.save_slice_as_image(seg_file_location, f"data/" + base_dir_path, seg_file_names)
+
+            im.save_slice_as_image(xai_file_location, f"data/" + base_dir_path, xai_file_names)
+   
+
+            return {"orgUrl": orgUrl, 
+                    "segUrl": segUrl, 
+                    "xaiUrl": xaiUrl, 
+                    "orgDim1Url": orgDim1Url, "orgDim2Url": orgDim2Url, "orgDim3Url": orgDim3Url, 
+                    "segDim1Url": segDim1Url, "segDim2Url": segDim2Url, "segDim3Url": segDim3Url, 
+                    "xaiDim1Url": xaiDim1Url, "xaiDim2Url": xaiDim2Url,  "xaiDim3Url": xaiDim3Url,  
+                    "filename": image_file.filename, 
+                    "location": org_file_location } 
+        
         except Exception as e:
             raise UnprocessableEntity("Failed to upload image.") 
 

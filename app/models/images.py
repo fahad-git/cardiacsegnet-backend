@@ -5,12 +5,21 @@ from typing import Dict
 class Image(BaseModel):
     uuid: str
     id: str
-    url: str 
-    segUrl: str 
-    xaiUrl: str 
+    orgUrl: str
+    segUrl: str
+    xaiUrl: str
+    orgDim1Url: str
+    orgDim2Url: str
+    orgDim3Url: str
+    segDim1Url: str
+    segDim2Url: str
+    segDim3Url: str
+    xaiDim1Url: str
+    xaiDim2Url: str
+    xaiDim3Url: str
     imageName: str
     reportUrl: str
-    imageExtention: str 
+    imageExtention: str
     imageAnnotations: object
     comments: str
 
@@ -29,5 +38,5 @@ def objectid_to_string(v):
 
 class AnnotationUpdateModel(BaseModel):
     uuid: str
-    url: str
+    orgurl: str
     imageAnnotations: Dict[str, str]

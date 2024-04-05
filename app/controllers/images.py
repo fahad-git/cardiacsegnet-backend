@@ -29,9 +29,23 @@ class ImagesController(BaseController):
         image_details_with_user: Image = {
             "uuid": user["uuid"],
             "id": image_details.id,
-            "url": image_details.url,
+
+            "orgUrl": image_details.orgUrl,
             "segUrl": image_details.segUrl,
             "xaiUrl": image_details.xaiUrl,
+
+            "orgDim1Url": image_details.orgDim1Url,
+            "orgDim2Url": image_details.orgDim2Url,
+            "orgDim3Url": image_details.orgDim3Url,
+
+            "segDim1Url": image_details.segDim1Url,
+            "segDim2Url": image_details.segDim2Url,
+            "segDim3Url": image_details.segDim3Url,
+
+            "xaiDim1Url": image_details.xaiDim1Url,
+            "xaiDim2Url": image_details.xaiDim2Url,
+            "xaiDim3Url": image_details.xaiDim3Url,
+
             "imageName": image_details.imageName,
             "reportUrl": image_details.reportUrl,
             "imageExtention": image_details.imageExtention,
