@@ -9,6 +9,8 @@ CardiacSegNet Backend is a robust server-side application designed to handle the
 - **API Endpoints:** Well-defined RESTful APIs for seamless integration with frontend applications.
 - **Data Management:** Secure storage and retrieval of imaging data.
 
+![CardiacSegNet](https://github.com/user-attachments/assets/81ed389e-6713-4f16-adab-1964fe717d46)
+
 ## Prerequisites
 
 Before setting up the project, ensure you have the following installed:
